@@ -1,21 +1,33 @@
 #ifndef PERMITDURATION_H
 #define PERMITDURATION_H
 
-#include <iostream>
+#include <ostream>
 
-class PermitDuration
+struct PermitDuration
 {
-private:
-    int _duration;
-public:
-    PermitDuration() : _duration(0) {}
-    PermitDuration(int duration) : _duration(duration) { if (_duration < 0) _duration = 0; if (_duration > 5) _duration = 5; }
+    int duration{0};
+    constexpr int MIN_DURATION = 0;
+    constexpr int MAX_DURATION = 5;
 
-    int getDuration() const { return _duration; }
-    void setDuration(int duration) { if (duration >= 0 && duration <= 5) _duration = duration; }
-
+    constexpr PermitDuration(int dur) {
+         if (dur < MIN_DURATION) {
+            duration = MIN_DURATION;
+          } else if (dur > MAX_DURATION) {
+            duration = MAX_DURATION;
+          } else {
+            duration = dur;
+          }
+          // could also be next but less readable
+          // duration = std::min(MAX_DURATION, std::max(MIN_DURATION, dur);
+    }
 
     friend std::ostream& operator<<(std::ostream& os, const PermitDuration& rhs);
 };
+
+std::ostream& operator<<(std::ostream& os, const PermitDuration& rhs) {
+    os << rhs._duration << " years";
+    return os;
+}
+
 
 #endif // PERMITDURATION_H
